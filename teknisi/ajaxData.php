@@ -35,7 +35,7 @@ if(!empty($_POST["kd_regional"])){
        
        <option value="" name="sto" id="sto">Pilih STO</option>';
         while($row = $query->fetch_assoc()){ 
-            echo '<option id="sto" value="'.$row['kd_sto'].'">'.$row['datel'].' <b> - STO '.$row['sto'].' </b> </option>';
+            echo '<option id="sto" value="'.$row['kd_sto'].'">'.$row['datel'].' <b> '.$row['sto'].' </b> </option>';
             
             
         }

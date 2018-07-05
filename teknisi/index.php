@@ -270,7 +270,7 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
               <div class="col-lg-12 col-xl-6 mb-2">
                 <div class="bg-white padding-25 h-100">
                  
-                  <form action="proses-input_order.php" method="POST" enctype="multipart/form-data">
+                  <form action="proses-input_order.php" method="POST" enctype="multipart/form-data" name="add_name" id="add_name">
                     <div class="form-group">
                       <label for="exampleInputPassword1">Nama Pekerjaan</label>
                       <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Nama Pekerjaan" name="namapekerjaan">
@@ -324,9 +324,42 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                       </div>
                     </div>
 
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Material</label>
+                             <div class="table-responsive">  
+                                      <table class="table table-bordered" id="dynamic_field">  
+                                          <tr>
+                                              <td><input type="text" name="name[]" placeholder="Material" class="form-control name_list" required="" /></td>  
+                                              <td><input type="text" name="unit[]" placeholder="Unit" class="form-control name_list" required="" /></td>  
+                                              <td><input type="text" name="volume[]" placeholder="Volume" class="form-control name_list" required="" /></td>  
+                                              <td><button type="button" name="add" id="add" class="btn btn-success">+</button></td>  
+                                          </tr>  
+                                      </table>  
+                                      <!-- <input type="button" name="submit" id="submit" class="btn btn-info" value="Submit" />   -->
+                                  </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Material</label>
+                             <div class="table-responsive">  
+                                      <table class="table table-bordered" id="dynamic_field_pekerjaan">  
+                                          <tr>
+                                              <td><input type="text" name="name_pekerjaan[]" placeholder="Pekerjaan" class="form-control name_list" required="" /></td>  
+                                              <td><input type="text" name="unit_pekerjaan[]" placeholder="Unit" class="form-control name_list" required="" /></td>  
+                                              <td><input type="text" name="volume_pekerjaan[]" placeholder="Volume" class="form-control name_list" required="" /></td>  
+                                              <td><button type="button" name="add" id="add_pekerjaan" class="btn btn-success">+</button></td>  
+                                          </tr>  
+                                      </table>  
+                                    <!--   <input type="button" name="submit_pekerjaan" id="submit_pekerjaan" class="btn btn-info" value="Submit" /> 
+                                  </div> -->
+                    </div>
+
+
                     <div class="form-group mb-0">
                       <button type="reset" class="btn btn-secondary">Draft</button>
-                      <button type="submit" class="btn btn-theme" name="buat_order">Submit</button>
+                      <button type="submit" class="btn btn-theme" name="submit" id="submit">Submit</button>
+                      <!-- <input type="button" name="submit" id="submit" class="btn btn-info" value="Submit" />   -->
                     </div>
 
                   </form>
@@ -661,7 +694,7 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                                             colspan="1"
                                                             aria-label="Id: activate to sort column descending"
                                                             class="text-center">
-                                                            Status
+                                                            Cetak
                                                         </th>
                                                         
                                                     </tr>
@@ -681,14 +714,12 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                                         <td><?php echo $data["penyebab"]; ?></td>
                                                          
                                                          <td class="text-center">
-                                                          <?php 
-                                                              if($data["status"]==1){
-                                                                  echo '<span class="badge badge-pill badge-info text-uppercase">Completed</span>';
-                                                              }else{
-                                                                echo '<span class="badge badge-pill badge-danger text-uppercase">Progress</span>';
-                                                                  
-                                                              }
-                                                          ?>
+                                                          
+                                                          <a href="cetak_order_kerja.php?notiket=<?php echo $data["notiket"]; ?>">
+                                                                    <button type="button" class="btn bg-transparent btn-circle" title="Print">
+                                                                      <b><i class="fa fa-print" ></i></b >
+                                                                    </button>
+                                                                    </a>
                                                          </td>
                                                     </tr>
                                                     <?php } ?>
@@ -806,4 +837,83 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
       });
     });
 
+
+    // UNTUK MATERIAL
+      $(document).ready(function(){      
+      var postURL = "addmore.php";
+      var i=1;  
+
+
+      $('#add').click(function(){  
+           i++;  
+           $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added"><td><input type="text" name="name[]" placeholder="Material" class="form-control name_list" required /></td><td><input type="text" name="unit[]" placeholder="Unit" class="form-control name_list" required /></td><td><input type="text" name="volume[]" placeholder="Volume" class="form-control name_list" required /></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></td></tr>');  
+      });
+
+
+      $(document).on('click', '.btn_remove', function(){  
+           var button_id = $(this).attr("id");   
+           $('#row'+button_id+'').remove();  
+      });  
+
+
+      $('#submit').click(function(){            
+           $.ajax({  
+                url:postURL,  
+                method:"POST",  
+                data:$('#add_name').serialize(),
+                type:'json',
+                success:function(data)  
+                {
+                    i=1;
+                    $('.dynamic-added').remove();
+                    $('#add_name')[0].reset();
+                }  
+           });  
+      });
+
+
+    }); 
+
+
+
+// UNTUK PEKERJAAN
+      $(document).ready(function(){      
+      var postURL = "addpekerjaan.php";
+      var i=1;  
+
+
+      $('#add_pekerjaan').click(function(){  
+           i++;  
+           $('#dynamic_field_pekerjaan').append('<tr id="row'+i+'" class="dynamic-added"><td><input type="text" name="name_pekerjaan[]" placeholder="Material" class="form-control name_list" required /></td><td><input type="text" name="unit_pekerjaan[]" placeholder="Unit" class="form-control name_list" required /></td><td><input type="text" name="volume_pekerjaan[]" placeholder="Volume" class="form-control name_list" required /></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></td></tr>');  
+      });
+
+
+      $(document).on('click', '.btn_remove_pekerjaan', function(){  
+           var button_id = $(this).attr("id_pekerjaan");   
+           $('#row_pekerjaan'+button_id+'').remove();  
+      });  
+
+
+      $('#submit').click(function(){            
+           $.ajax({  
+                url:postURL,  
+                method:"POST",  
+                data:$('#add_name').serialize(),
+                type:'json',
+                success:function(data)  
+                {
+                    i=1;
+                    $('.dynamic-added_pekerjaan').remove();
+                    $('#add_name')[0].reset();
+                }  
+           });  
+      });
+
+
+    }); 
+
+
+     
   </script>
+
+ 

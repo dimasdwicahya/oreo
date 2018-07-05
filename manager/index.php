@@ -521,7 +521,7 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
                               ?>
                               <tr>
                                 <td class="text-center"><?php echo $data["id"]; ?></td>
-                                <td class="text-center"><?php echo $data["notiket"]; ?></td>
+                                <td class="text-center"><a href="cetak_order_kerja.php?notiket=<?php echo $data["notiket"]; ?>"><?php echo $data["notiket"]; ?></a></td>
                                 <td><?php echo $data["tanggal_buat"]; ?></td>
                                 <td><?php echo $data["namapekerjaan"]; ?></td>
                                 <td><?php echo $data["lokasi"]; ?></td>

@@ -75,7 +75,7 @@ $pdf->Cell(34 ,5,'[1234567]',0,1);//end of line
 $pdf->Cell(189 ,10,'',0,1);//end of line
 
 //billing address
-$pdf->Cell(100 ,5,'Bill to',0,1);//end of line
+$pdf->Cell(100 ,5,'Material',0,1);//end of line
 
 //add dummy cell at beginning of each line for indentation
 $pdf->Cell(10 ,5,'',0,0);
