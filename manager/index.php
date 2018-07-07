@@ -43,29 +43,20 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
           <!-- menu profile quick info -->
           <div class="profile clearfix">
             <div class="profile-pic">
-              <?php
-              while($data_user=mysqli_fetch_array($query)){
-              ?>
-              <img src="../img/<?php echo $data_user['foto']?>" alt="Profile picture" class="rounded-circle profile-img">
-              <?php
+            <?php
+              $a = mysqli_query($db,"SELECT * FROM tb_user WHERE nama='$nama'");
+              while($aa=mysqli_fetch_array($a)){
+                echo "<img src='../img/$aa[foto]' alt='Profile picture' class='rounded-circle profile-img'>";                
               }
-              ?>
+
+            ?>
             </div>
             <div class="profile-info">
               <h2><?php echo $nama; ?></h2>
             </div>
           </div>
           <!-- /menu profile quick info -->
-          <!-- search -->
-          <div class="search-wrap d-sm-none clearfix text-center">
-            <form autocomplete="on">
-              <input class="search" name="search" type="text" placeholder="What're we looking for?">
-              <div>
-                <button class="search-submit" value="Rechercher" type="submit"> <i class="fa fa-search" aria-hidden="true"></i></button>
-              </div>
-            </form>
-          </div>
-          <!-- /search -->
+  
           <!-- sidebar menu -->
           <div id="sidebar-menu" class="main-menu-wrapper">
             <div class="menu-section">
@@ -121,12 +112,7 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
             </div>
             <ul class="nav navbar-nav navbar-right">
               <li class="search-wrap d-sm-none d-md-block">
-                <form autocomplete="on">
-                  <input type="text" name="search" class="search" placeholder="What're we looking for?">
-                  <div>
-                    <button class="search-submit" value="" type="submit"> <i class="fa fa-search" aria-hidden="true"></i></button>
-                  </div>
-                </form>
+                 
               </li>
               <li class="profile-dropdown dropdown">
                 <a href="javascript:void(0)" class="user-profile dropdown-toggle ripple" data-toggle="dropdown" aria-expanded="false">
@@ -177,7 +163,7 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
               <!-- START breadcrumb -->
               <ol class="breadcrumb pl-0 pr-0 float-lg-right">
                 <li><a href="index-2.html">Oreo</a></li>
-                <li><a href="javascript:void(0)">Teknisi</a></li>
+                <li><a href="javascript:void(0)">Manager</a></li>
                 <li class="active">Dashboard</li>
               </ol>
               <!-- END breadcrumb -->
@@ -223,7 +209,7 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
               <!-- START breadcrumb -->
               <ol class="breadcrumb pl-0 pr-0 float-lg-right">
                 <li><a href="index-2.html">Oreo</a></li>
-                <li><a href="javascript:void(0)">Teknisi</a></li>
+                <li><a href="javascript:void(0)">Manager</a></li>
                 <li class="active">In Progress Order</li>
               </ol>
               <!-- END breadcrumb -->
@@ -263,6 +249,8 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
                     <div class="row">
                       <div class="col-sm-12">
                         <div class="table-responsive">
+                                                                                <!--  UNTUK NGESET NIP SI YG MENG ACCKANNYA -->
+                          
                           <table id="example2" class="table table-striped table-bordered data-table table-checkable mb-0" role="grid">
                             <thead>
                               <tr>
@@ -316,9 +304,23 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
                               </tr>
                             </thead>
                             <tbody>
-                              <?php while ($data=mysqli_fetch_array($res))
+                             <?php while ($data=mysqli_fetch_array($res))
                               {
                               ?>
+
+                              <?php
+                                  $d = mysqli_query($db,"SELECT * FROM tb_user WHERE nama='$nama'");
+                                  while($dd=mysqli_fetch_array($d)){
+                                ?>
+                                
+                                <?php
+
+                                  echo "<form method='POST' action='index.php?page=proses_acc_order'>";
+
+                                ?>
+
+                                <?php echo "<input type='hidden' value='$data[notiket]' name='notiket'>"; ?>
+                                <?php echo "<input type='hidden' value='$dd[nip]' name='nip_penyetuju'>"; ?>
                               <tr>
                                 <td class="text-center"><?php echo $data["id"]; ?></td>
                                 <td class="text-center"><?php echo"<a href=index.php?page=in_progress_order_detail&notiket=".$data['notiket'].">";
@@ -347,20 +349,29 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
                                     if($data["status"]==1){
                                     echo 'Completed';
                                     }else{
-                                    echo 'Progress';
+                                    echo 'Butuh Persetujuan';
                                     }
                                     ?>
                                     </button>
+           
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                      <a class="dropdown-item" href="#">Completed</a>
-                                      <a class="dropdown-item" href="#">Progress</a>
+                                      <input type="submit" name="status" value='ACC'></input> 
+                                      <input type="submit" name="status" value='DENY'></input>
+
+                                      <!-- <a class="dropdown-item" href="index.php?page=proses_acc_order&notiket=<?php echo $data["notiket"]; ?> &status=1&nip_penyetuju=<?php echo $dd["nip"];?>">ACC ORDER</a>
+                                      <a class="dropdown-item" href="index.php?page=proses_acc_order&notiket=<?php echo $data["notiket"]; ?> &status=3&nip_penyetuju=<?php echo $dd["nip"];?>">DENY ORDER</a> -->
                                     </div>
                                   </div>
+                                  <?php
+                                    }
+                                  ?>
                                 </td>
                               </tr>
                               <?php } ?>
+                              </form>
                             </tbody>
                           </table>
+                        
                         </div>
                       </div>
                     </div>
@@ -397,6 +408,11 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
             </div>
           </div>
         </div>
+
+         
+
+
+
         <!-- /page content -->
         <?php
         break;
@@ -408,7 +424,8 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
         FROM ((tb_order
         INNER JOIN tb_witel ON tb_order.kd_witel = tb_witel.kd_witel)
         INNER JOIN tb_tiket ON tb_order.notiket = tb_tiket.notiket)
-        WHERE tb_tiket.status=1
+        WHERE tb_tiket.status=1 || tb_tiket.status=3
+        
         ";
         $res = mysqli_query($db,$sql);
         ?>
@@ -423,7 +440,7 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
               <!-- START breadcrumb -->
               <ol class="breadcrumb pl-0 pr-0 float-lg-right">
                 <li><a href="index-2.html">Oreo</a></li>
-                <li><a href="javascript:void(0)">Teknisi</a></li>
+                <li><a href="javascript:void(0)">Manager</a></li>
                 <li class="active">Complete Order</li>
               </ol>
               <!-- END breadcrumb -->
@@ -521,7 +538,20 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
                               ?>
                               <tr>
                                 <td class="text-center"><?php echo $data["id"]; ?></td>
-                                <td class="text-center"><a href="cetak_order_kerja.php?notiket=<?php echo $data["notiket"]; ?>"><?php echo $data["notiket"]; ?></a></td>
+                                <td class="text-center">
+                                  <?php
+                                    $tiket_status = $data['status'];
+                                    if($tiket_status==1){  
+                                  ?>
+                                  <a href="cetak_order_kerja.php?notiket=<?php echo $data["notiket"]; ?>"><?php echo $data["notiket"]; ?>
+                                  </a>
+                                  <?php
+                                    }else{
+                                    echo $data["notiket"];
+                                    }
+                                  ?>
+
+                                </td>
                                 <td><?php echo $data["tanggal_buat"]; ?></td>
                                 <td><?php echo $data["namapekerjaan"]; ?></td>
                                 <td><?php echo $data["lokasi"]; ?></td>
@@ -531,8 +561,10 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
                                   <?php
                                   if($data["status"]==1){
                                   echo '<span class="badge badge-pill badge-info text-uppercase">Completed</span>';
-                                  }else{
+                                  }else if($data["status"]==0){
                                   echo '<span class="badge badge-pill badge-danger text-uppercase">Progress</span>';
+                                  }else if($data["status"]==3){
+                                  echo '<span class="badge badge-pill badge-warning text-uppercase">Deny</span>';
                                   }
                                   ?>
                                 </td>
@@ -601,7 +633,7 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
               <!-- START breadcrumb -->
               <ol class="breadcrumb pl-0 pr-0 float-lg-right">
                 <li><a href="index-2.html">Oreo</a></li>
-                <li><a href="javascript:void(0)">Teknisi</a></li>
+                <li><a href="javascript:void(0)">Manager</a></li>
                 <li class="active">In Progress Order Detail</li>
               </ol>
               <!-- END breadcrumb -->
@@ -624,11 +656,11 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
                       <div class="col-sm-12">
                         <div class="table-responsive">
                           
-                           
+                          <form action="index.php?page=proses_acc_order&notiket=<?php echo $data[notiket];?>" method="POST">
                           <table class="table">
                           <tr>
-                            <td colspan="4"><center>
-                              
+                            <td colspan="4">
+                              <center>
                                 <img src="../img/logo_telkom.png"/ style="width:200px;height: auto;">
                               </center>
                            </td>
@@ -642,8 +674,8 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
                             <td>
                               <?php echo $data["notiket"]; ?>
                             </td>
-                            <td colspan="4"><center>
-                              
+                            <td colspan="4">
+                              <center>
                                 <img src="../img/logo_telak.png"/ style="width:200px;height: auto;">
                               </center>
                            </td>
@@ -727,9 +759,40 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
                            </td>
                           </tr>
                           <tr>
+                            <?php 
+                            $data_lampiran = mysqli_query($db,"SELECT * FROM tb_lampiran WHERE notiket='$_GET[notiket]'");
+                            while ($dt_lampiran=mysqli_fetch_array($data_lampiran))
+                            {
+                            ?>
                             <td colspan="5">
                               <center>
-                                <img src="../lampiran/<?php echo $data["lampiran"];?>" style="width: 200px; height: 180px;"?>
+                                <?php
+                                  if(($dt_lampiran['ft_sebelum_2']==null)&&($dt_lampiran['ft_sebelum_3']==null)){
+                                    echo"
+                                      <img src='../lampiran/$dt_lampiran[ft_sebelum_1]' style='width: 200px; height: 180px;' />
+                                    ";
+                                  }else if($dt_lampiran['ft_sebelum_3']!=null){
+                                    echo"
+                                      <img src='../lampiran/$dt_lampiran[ft_sebelum_1]' style='width: 200px; height: 180px;' />
+                                      <img src='../lampiran/$dt_lampiran[ft_sebelum_2]' style='width: 200px; height: 180px;' />
+                                      <img src='../lampiran/$dt_lampiran[ft_sebelum_3]' style='width: 200px; height: 180px;' />
+                                    ";
+                                  }else if($dt_lampiran['ft_sebelum_2']!=null){
+                                    echo"
+                                      <img src='../lampiran/$dt_lampiran[ft_sebelum_1]' style='width: 200px; height: 180px;' />
+                                      <img src='../lampiran/$dt_lampiran[ft_sebelum_2]' style='width: 200px; height: 180px;' />
+                                      ";
+                                  }else if($dt_lampiran['ft_sebelum_1']==null){
+                                    echo"
+                                      Tidak ada foto Sebelum.
+                                    ";
+                                  }else{
+                                    echo"
+                                      Tidak ada foto Sebelum.
+                                    ";
+                                  }                                     
+                 
+                                ?>
                               </center>
                            </td>
        
@@ -738,33 +801,113 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
                
                             <td colspan="5">
                               <center>
-                                <img src="../lampiran/<?php echo $data["lampiran"];?>" style="width: 200px; height: 180px;"?>
-                              </center>
+                                <?php
+                                  if(($dt_lampiran['ft_progress_2']==null)&&($dt_lampiran['ft_progress_3']==null)){
+                                    echo"
+                                      <img src='../lampiran/$dt_lampiran[ft_progress_1]' style='width: 200px; height: 180px;' />
+                                    ";
+                                  }else if($dt_lampiran['ft_progress_3']!=null){
+                                    echo"
+                                      <img src='../lampiran/$dt_lampiran[ft_progress_1]' style='width: 200px; height: 180px;' />
+                                      <img src='../lampiran/$dt_lampiran[ft_progress_2]' style='width: 200px; height: 180px;' />
+                                      <img src='../lampiran/$dt_lampiran[ft_progress_3]' style='width: 200px; height: 180px;' />
+                                    ";
+                                  }else if($dt_lampiran['ft_progress_2']!=null){
+                                    echo"
+                                      <img src='../lampiran/$dt_lampiran[ft_progress_1]' style='width: 200px; height: 180px;' />
+                                      <img src='../lampiran/$dt_lampiran[ft_progress_2]' style='width: 200px; height: 180px;' />
+                                      ";
+                                  }else if($dt_lampiran['ft_progress_1']==null){
+                                    echo"
+                                      Tidak ada foto Progress.
+                                    ";
+                                  }else{
+                                    echo"
+                                      Tidak ada foto Progress.
+                                    ";
+                                  }                                     
+                 
+                                ?>
+                            </center>
                            </td>
                           </tr>
+                          
                           <tr>
-                            <td colspan="11"><center>Foto GeoTagging</center></td>
+                            <td colspan="11"><center>Foto Sesudah</center></td>
                           </tr>
                           
                           <tr>
                             <td colspan="11">
                               <center>
-                                <img src="../lampiran/<?php echo $data["lampiran"];?>" style="width: 200px; height: 180px;"?>
+                                <?php
+                                  if(($dt_lampiran['ft_sesudah_2']==null)&&($dt_lampiran['ft_sesudah_3']==null)){
+                                    echo"
+                                      <img src='../lampiran/$dt_lampiran[ft_sesudah_1]' style='width: 200px; height: 180px;' />
+                                    ";
+                                  }else if($dt_lampiran['ft_sesudah_3']!=null){
+                                    echo"
+                                      <img src='../lampiran/$dt_lampiran[ft_sesudah_1]' style='width: 200px; height: 180px;' />
+                                      <img src='../lampiran/$dt_lampiran[ft_sesudah_2]' style='width: 200px; height: 180px;' />
+                                      <img src='../lampiran/$dt_lampiran[ft_sesudah_3]' style='width: 200px; height: 180px;' />
+                                    ";
+                                  }else if($dt_lampiran['ft_sesudah_2']!=null){
+                                    echo"
+                                      <img src='../lampiran/$dt_lampiran[ft_sesudah_1]' style='width: 200px; height: 180px;' />
+                                      <img src='../lampiran/$dt_lampiran[ft_sesudah_2]' style='width: 200px; height: 180px;' />
+                                      ";
+                                  }else{
+                                    echo"
+                                      Tidak ada foto Sesudah.
+                                    ";
+                                }                                     
+                 
+                                ?>
+                              </center>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="11"><center>Foto Denah</center></td>
+                          </tr>
+                          
+                          <tr>
+                            <td colspan="11">
+                              <center>
+                                <?php
+                                if($dt_lampiran['ft_denah']!=null){
+                                    echo"
+                                      <img src='../lampiran/$dt_lampiran[ft_denah]' style='width: 200px; height: 180px;' />
+                                    ";
+                                }else{
+                                    echo"
+                                      Tidak ada foto denah.
+                                    ";
+                                }
+                                ?>
                               </center>
                             </td>
                           </tr>
 
+                          <?php
+                            } //end of data_lampiran
+                          ?>
+
                           <tr>
                             <td colspan="11">
-                              <form action="index.php?page=proses_acc_order&notiket=<?php echo $data["notiket"]; ?>" method="POST">
-                                
-                                <input type="submit" class="btn btn-danger btn-raised ripple" style="width: 100%;" name="bt_acc" value="ACC ORDER"></input>
-                              </form>
-                            </td>
+                             <!--  UNTUK NGESET NIP SI YG MENG ACCKANNYA -->
+                              <?php
+                                $b = mysqli_query($db,"SELECT * FROM tb_user WHERE nama='$nama'");
+                                while($bb=mysqli_fetch_array($b)){
+                                  echo "<input type='hidden' name='nip_penyetuju' value='$bb[nip]'>";                
+                                }
 
+                              ?>
+                              
+                              <input type="submit" class="btn btn-danger btn-raised ripple" style="width: 100%;" name="bt_acc" value="ACC ORDER"></input>
+                            </td>
                           </tr>
                         
                           </table>
+                        </form>
 
                       
                         </div>
@@ -791,16 +934,54 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
 
         <?php
         case "proses_acc_order":
-        $notikets=$_GET['notiket'];
+        $notikets=$_POST['notiket'];
+        $nip_penyetuju=$_POST['nip_penyetuju'];
+        
+        if($_POST['status']=="ACC"){
+          $status=1;
+          $sql_update = mysqli_query($db,"UPDATE tb_tiket SET nip_penyetuju=$nip_penyetuju ,tanggal_acc=NOW(), status=$status WHERE notiket='$notikets'");
+          if($sql_update){
+
+              echo "<script>
+                      alert('Data berhasil di acc');
+                      window.location.href='index.php?page=in_progress_order';
+                    </script>
+                    ";
+
+          } else {
+
+              echo "<script>
+                      alert('Data tidak di acc');
+                      window.location.href='index.php?page=in_progress_order';
+                    </script>
+                    ";
+          }
+
+        }else if($_POST['status']=="DENY"){
+          $status=3;
+          $sql_update = mysqli_query($db,"UPDATE tb_tiket SET nip_penyetuju=$nip_penyetuju ,tanggal_acc=NOW(), status=$status WHERE notiket='$notikets'");
+          if($sql_update){
+
+              echo "<script>
+                      alert('Data berhasil di Tolak');
+                      window.location.href='index.php?page=in_progress_order';
+                    </script>
+                    ";
+
+          } else {
+
+              echo "<script>
+                      alert('Data gagal di tolak');
+                      window.location.href='index.php?page=in_progress_order';
+                    </script>
+                    ";
+          }
+        }else{
+          $status=0;
+        }
         
         
 
-          $sql_update = mysqli_query($db,"UPDATE tb_tiket SET status=1 WHERE notiket='$notikets'");
-          if($sql_update){
-              echo "Records were updated successfully";
-          } else {
-              echo "ERROR: Could not able to executesql";
-          }
           
         
         break;

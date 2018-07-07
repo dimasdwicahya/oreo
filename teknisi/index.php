@@ -11,6 +11,9 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
 }
 
 ?>
+
+
+
 <!-- site head -->
 <!DOCTYPE html>
 <html lang="en">
@@ -48,12 +51,12 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
         <!-- menu profile quick info -->
         <div class="profile clearfix">
           <div class="profile-pic">
-            <?php 
-            while($data_user=mysqli_fetch_array($query)){
-              ?>
-              <img src="../img/<?php echo $data_user['foto']?>" alt="Profile picture" class="rounded-circle profile-img">
-              <?php
-            }
+            <?php
+              $a = mysqli_query($db,"SELECT * FROM tb_user WHERE nama='$nama'");
+              while($aa=mysqli_fetch_array($a)){
+                echo "<img src='../img/$aa[foto]' alt='Profile picture' class='rounded-circle profile-img'>";                
+              }
+
             ?>
           </div>
           <div class="profile-info">
@@ -156,7 +159,16 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
 
                     </div>
                     <div class="profile-info">
-                      <h2> <h2><?php echo $nama; ?></h2></h2>
+                      <h2> <h2>
+                        <?php
+                        $c = mysqli_query($db,"SELECT * FROM tb_user WHERE nama='$nama'");
+                        while ($r=mysqli_fetch_array($c)) {
+                            echo $r["foto"];
+                        }
+                       // echo $nama; 
+                        ?>
+                         
+                       </h2></h2>
                     </div>
                   </div>
                 </li>
@@ -319,10 +331,19 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                     <div class="form-group">
                       <label for="exampleFormControlTextarea1">Lampiran</label>
                       <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="validatedCustomFile" required="" name="foto_lampiran">
-                        <label class="custom-file-label" for="validatedCustomFile">Pilih foto (JPG,JPEG,PNG Max 5Mb)</label>
+                        <input class="custom-file-input" id="validatedCustomFile" type="file" name="gambar_ft_sebelum[]" multiple required>
+                        <label class="custom-file-label" for="validatedCustomFile">Pilih foto Sebelum Min 1 Maks 3</label>
+                      </div>
+                      <div class="custom-file">
+                        <input class="custom-file-input" id="validatedCustomFile" type="file" name="gambar_ft_progress[]" multiple required>
+                        <label class="custom-file-label" for="validatedCustomFile">Pilih foto Progress Min 1 Maks 3</label>
+                      </div>
+                      <div class="custom-file">
+                        <input class="custom-file-input" id="validatedCustomFile" type="file" name="gambar_ft_sesudah[]" multiple required>
+                        <label class="custom-file-label" for="validatedCustomFile">Pilih foto Sesudah Min 1 Maks 3</label>
                       </div>
                     </div>
+
 
                     <div class="form-group">
                       <label for="exampleInputPassword1">Material</label>
@@ -341,7 +362,7 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
 
 
                     <div class="form-group">
-                      <label for="exampleInputPassword1">Material</label>
+                      <label for="exampleInputPassword1">Pekerjaan</label>
                              <div class="table-responsive">  
                                       <table class="table table-bordered" id="dynamic_field_pekerjaan">  
                                           <tr>
@@ -786,6 +807,7 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
       </footer><!-- /footer content -->
     </div>
   </div>
+
   <!-- site foot -->
   <script src="../js/vendor.min.js"></script>
   <script src="../js/main.js"></script>

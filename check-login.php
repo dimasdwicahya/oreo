@@ -54,7 +54,7 @@ if( strlen($username) < 2 )
    //data hak Admin di set
    $_SESSION['saya_manager']= 'TRUE';
    //menuju halaman sesuai hak akses
-  header('location:manager/index.php');
+  header('location:manager/index.php?page=dashboard');
   exit();
   }
 
