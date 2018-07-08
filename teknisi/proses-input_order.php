@@ -5,13 +5,14 @@ include("../dbConfig.php");
 // cek apakah tombol daftar sudah diklik atau blum?
 if(isset($_POST['submit'])){
 
-		// ambil data dari formulir
+	// ambil data dari formulir
 	$namapekerjaan = $_POST['namapekerjaan'];
 	$notiket = $_POST['notiket'];
 	$lokasi = $_POST['lokasi'];
 	$sto = $_POST['sto'];
 	$witel = $_POST['witel'];
 	$penyebab = $_POST['penyebab']; 
+  $nip_pembuat = $_POST['nip_pembuat'];
 
 
     $jumlah_ft_sebelum = count($_FILES['gambar_ft_sebelum']['name']);
@@ -44,16 +45,23 @@ if(isset($_POST['submit'])){
         $gambar_ft_sesudah[$i] = $file_name;                 
       }
 
-      mysqli_query($db,"INSERT INTO tb_lampiran(notiket,ft_sebelum_1,ft_sebelum_2,ft_sebelum_3,ft_progress_1,ft_progress_2,ft_progress_3,ft_sesudah_1,ft_sesudah_2,ft_sesudah_3) 
+      //FOTO UNTUK DENAH
+      $file_name = $_FILES['gambar_ft_denah']['name'];
+      $tmp_name = $_FILES['gambar_ft_denah']['tmp_name'];        
+      move_uploaded_file($tmp_name, "../lampiran/".$file_name);
+      $gambar_ft_denah= $file_name;   
+
+      mysqli_query($db,"INSERT INTO tb_lampiran(notiket,ft_sebelum_1,ft_sebelum_2,ft_sebelum_3,ft_progress_1,ft_progress_2,ft_progress_3,ft_sesudah_1,ft_sesudah_2,ft_sesudah_3,ft_denah) 
         VALUES('$notiket',
         '$gambar_ft_sebelum[0]','$gambar_ft_sebelum[1]','$gambar_ft_sebelum[2]',
         '$gambar_ft_progress[0]','$gambar_ft_progress[1]','$gambar_ft_progress[2]',
-        '$gambar_ft_sesudah[0]','$gambar_ft_sesudah[1]','$gambar_ft_sesudah[2]'
+        '$gambar_ft_sesudah[0]','$gambar_ft_sesudah[1]','$gambar_ft_sesudah[2]',
+        '$gambar_ft_denah'
         )"
       );
 
        //insert ke tabel tb_tiket
-      mysqli_query($db,"INSERT INTO tb_tiket(notiket) VALUES ('$notiket')");
+      mysqli_query($db,"INSERT INTO tb_tiket(notiket,nip_pembuat) VALUES ('$notiket','$nip_pembuat')");
 
 
       //insert ke tabel tb_order
@@ -65,7 +73,7 @@ if(isset($_POST['submit'])){
                                      '$witel',
                                      '$penyebab')"
                                    );
-      echo "<script>alert('Insert data berhasil! Klik ok untuk melanjutkan');location.replace('index.php?page=dashboard')</script>";
+      echo "<script>alert('Insert data berhasil! Klik ok untuk melanjutkan');location.replace('index.php?page=input_order')</script>";
         
     }else if (($jumlah_ft_sebelum == 1)||($jumlah_ft_progress == 1)||($jumlah_ft_sesudah == 1)) {
       $gambar_ft_sebelum = array();
@@ -93,19 +101,26 @@ if(isset($_POST['submit'])){
         $gambar_ft_sesudah[$i] = $file_name;                 
       }
 
+      //FOTO UNTUK DENAH
+      $file_name = $_FILES['gambar_ft_denah']['name'];
+      $tmp_name = $_FILES['gambar_ft_denah']['tmp_name'];        
+      move_uploaded_file($tmp_name, "../lampiran/".$file_name);
+      $gambar_ft_denah= $file_name;  
+
       
   
       //insert ke tabel tb_lampiran
-      mysqli_query($db,"INSERT INTO tb_lampiran(notiket,ft_sebelum_1,ft_sebelum_2,ft_sebelum_3,ft_progress_1,ft_progress_2,ft_progress_3,ft_sesudah_1,ft_sesudah_2,ft_sesudah_3) 
+      mysqli_query($db,"INSERT INTO tb_lampiran(notiket,ft_sebelum_1,ft_sebelum_2,ft_sebelum_3,ft_progress_1,ft_progress_2,ft_progress_3,ft_sesudah_1,ft_sesudah_2,ft_sesudah_3,ft_denah) 
         VALUES('$notiket',
         '$gambar_ft_sebelum[0]','','',
         '$gambar_ft_progress[0]','','',
-        '$gambar_ft_sesudah[0]','',''
+        '$gambar_ft_sesudah[0]','','',
+        '$gambar_ft_denah'
         )"
       );
 
       //insert ke tabel tb_tiket
-      mysqli_query($db,"INSERT INTO tb_tiket(notiket) VALUES ('$notiket')");
+      mysqli_query($db,"INSERT INTO tb_tiket(notiket,nip_pembuat) VALUES ('$notiket','$nip_pembuat')");
 
 
       //insert ke tabel tb_order
@@ -117,7 +132,7 @@ if(isset($_POST['submit'])){
                                      '$witel',
                                      '$penyebab')"
                                    );
-       echo "<script>alert('Insert data berhasil! Klik ok untuk melanjutkan');location.replace('index.php?page=dashboard')</script>";
+       echo "<script>alert('Insert data berhasil! Klik ok untuk melanjutkan');location.replace('index.php?page=input_order')</script>";
      
 
 
@@ -149,16 +164,23 @@ if(isset($_POST['submit'])){
         $gambar_ft_sesudah[$i] = $file_name;                 
       }
 
-      mysqli_query($db,"INSERT INTO tb_lampiran(notiket,ft_sebelum_1,ft_sebelum_2,ft_sebelum_3,ft_progress_1,ft_progress_2,ft_progress_3,ft_sesudah_1,ft_sesudah_2,ft_sesudah_3) 
+      //FOTO UNTUK DENAH
+      $file_name = $_FILES['gambar_ft_denah']['name'];
+      $tmp_name = $_FILES['gambar_ft_denah']['tmp_name'];        
+      move_uploaded_file($tmp_name, "../lampiran/".$file_name);
+      $gambar_ft_denah= $file_name;        
+
+      mysqli_query($db,"INSERT INTO tb_lampiran(notiket,ft_sebelum_1,ft_sebelum_2,ft_sebelum_3,ft_progress_1,ft_progress_2,ft_progress_3,ft_sesudah_1,ft_sesudah_2,ft_sesudah_3,ft_denah) 
         VALUES('$notiket',
         '$gambar_ft_sebelum[0]','$gambar_ft_sebelum[1]','',
         '$gambar_ft_progress[0]','$gambar_ft_progress[1]','',
-        '$gambar_ft_sesudah[0]','$gambar_ft_sesudah[1]',''
+        '$gambar_ft_sesudah[0]','$gambar_ft_sesudah[1]','',
+        'gambar_ft_denah'
         )"
       );
 
       //insert ke tabel tb_tiket
-      mysqli_query($db,"INSERT INTO tb_tiket(notiket) VALUES ('$notiket')");
+      mysqli_query($db,"INSERT INTO tb_tiket(notiket,nip_pembuat) VALUES ('$notiket','$nip_pembuat')");
 
 
       //insert ke tabel tb_order
@@ -171,7 +193,7 @@ if(isset($_POST['submit'])){
                                      '$penyebab')"
                                    );
 
-       echo "<script>alert('Insert data berhasil! Klik ok untuk melanjutkan');location.replace('index.php?page=dashboard')</script>";
+       echo "<script>alert('Insert data berhasil! Klik ok untuk melanjutkan');location.replace('index.php?page=input_order')</script>";
 
        
     }else if (($jumlah_ft_sebelum == 0)||($jumlah_ft_progress == 0)||($jumlah_ft_sesudah == 0)) {
@@ -230,6 +252,7 @@ if(isset($_POST['submit'])){
 } 
 else {
 	die("Akses dilarang...");
+  header('location:../logout.php');
 }
 
 ?>

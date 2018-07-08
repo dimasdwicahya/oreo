@@ -1,4 +1,12 @@
 <?php
+session_start(); //memulai session
+if( !isset($_SESSION['saya_manager']) ) //jika session login bukan manager
+{
+header('location:./../'.$_SESSION['akses']); //alihkan berdasarkan hak akses
+exit();
+}
+?>
+<?php
 require '../dbconfig.php';
 require '../fpdf/fpdf.php';
 
@@ -54,6 +62,10 @@ $pdf->Cell(50,5,'',0,0); //dummy cell to align next cell, should be invisible
 $pdf->Cell(30,5,'Nama Pekerjaan',0,0);
 $pdf->Cell(2,5,':',0,0,'C');
 $pdf->Cell(30,5,$row['namapekerjaan'],0,0);
+
+
+
+
 //$pdf->Cell(50,10,'Passing',1,0); //vertically merged cell
 $pdf->Cell(0,5,'',0,1); //dummy line ending, height=5(normal row height) width=09 should be invisible 
 //second line(row)

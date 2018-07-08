@@ -137,8 +137,7 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
                       </div>
                     </div>
                   </li>
-                  <li><a href="user-profile.html"><i class="fa fa-user-o" aria-hidden="true"></i>Profile</a></li>
-                  <li><a href="javascript:void(0)"><i class="fa fa-cog" aria-hidden="true"></i> Pengaturan</a></li>
+                  <li><a href="index.php?page=dashboard"><i class="fa fa-user-o" aria-hidden="true"></i>Profile</a></li>
                   <li><a href="../logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
                 </ul>
               </li>
@@ -344,7 +343,7 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
                                   <div class="dropdown">
                                     <button class="btn btn-info dropdown-toggle badge-pill badge-danger" type="button"
                                     id="dropdownMenuButton1" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
+                                    aria-haspopup="true" aria-expanded="false" style="margin:auto;">
                                     <?php
                                     if($data["status"]==1){
                                     echo 'Completed';
@@ -355,8 +354,9 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
                                     </button>
            
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                      <input type="submit" name="status" value='ACC'></input> 
-                                      <input type="submit" name="status" value='DENY'></input>
+                                      
+                                      <input type="submit" name="status" value='ACC' style="width: 100%;margin:auto;cursor:pointer" class="dropdown-item"></input> 
+                                      <input type="submit" name="status" value='DENY' style="width: 100%;margin:auto;cursor:pointer" class="dropdown-item"></input>
 
                                       <!-- <a class="dropdown-item" href="index.php?page=proses_acc_order&notiket=<?php echo $data["notiket"]; ?> &status=1&nip_penyetuju=<?php echo $dd["nip"];?>">ACC ORDER</a>
                                       <a class="dropdown-item" href="index.php?page=proses_acc_order&notiket=<?php echo $data["notiket"]; ?> &status=3&nip_penyetuju=<?php echo $dd["nip"];?>">DENY ORDER</a> -->
@@ -408,12 +408,7 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
             </div>
           </div>
         </div>
-
-         
-
-
-
-        <!-- /page content -->
+       <!-- /page content -->
         <?php
         break;
         // END HALAMAN IN PROGRESS ORDER
@@ -530,28 +525,23 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
                                   class="text-center">
                                   Status
                                 </th>
+                                <th tabindex="0" aria-controls="example" rowspan="1"
+                                  colspan="1"
+                                  aria-label="Id: activate to sort column descending"
+                                  class="text-center">
+                                  Cetak
+                                </th>                                
                               </tr>
                             </thead>
                             <tbody>
-                              <?php while ($data=mysqli_fetch_array($res))
+                              <?php 
+                              $nomor=1;
+                              while ($nomor<=($data=mysqli_fetch_array($res)))
                               {
                               ?>
                               <tr>
-                                <td class="text-center"><?php echo $data["id"]; ?></td>
-                                <td class="text-center">
-                                  <?php
-                                    $tiket_status = $data['status'];
-                                    if($tiket_status==1){  
-                                  ?>
-                                  <a href="cetak_order_kerja.php?notiket=<?php echo $data["notiket"]; ?>"><?php echo $data["notiket"]; ?>
-                                  </a>
-                                  <?php
-                                    }else{
-                                    echo $data["notiket"];
-                                    }
-                                  ?>
-
-                                </td>
+                                <td class="text-center"><?php echo $nomor; ?></td>
+                                <td class="text-center"><?php echo $data["notiket"];?></td>
                                 <td><?php echo $data["tanggal_buat"]; ?></td>
                                 <td><?php echo $data["namapekerjaan"]; ?></td>
                                 <td><?php echo $data["lokasi"]; ?></td>
@@ -568,13 +558,54 @@ $query = mysqli_query($db,"SELECT * FROM tb_user WHERE username='$nama' ");
                                   }
                                   ?>
                                 </td>
+                                <td class="text-center">
+                                  <?php if($data["status"]==1){ ?>
+                                  <a href="cetak_order_kerja.php?notiket=<?php echo $data["notiket"]; ?>">
+                                    <button type="button" class="btn bg-transparent btn-circle" title="Print">
+                                      <b><i class="fa fa-print" ></i></b>
+                                    </button>
+                                  </a>
+                                  <?php
+                                   } 
+                                  else if($data["status"]==3){?>
+                                    <button class="btn width-100-xs bg-transparent btn-circle" data-toggle="modal" data-target=".bd-example-modal-lg" title="Print">
+                                      <b><i class="fa fa-print" ></i></b>
+                                    </button>
+ 
+                                   <?
+                                  } 
+                                  ?>
+                                </td>                                
                               </tr>
-                              <?php } ?>
+                              <?php 
+                              $nomor++;
+                              } ?>
                             </tbody>
                           </table>
                         </div>
                       </div>
                     </div>
+
+                    <!-- Large Modal -->
+                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+
+                          <div class="modal-header">
+                                                <h4 class="modal-title" id="myLargeModalLabel">Surat Order Kerja Tidak Dapat Di Print</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                          </div>
+                          <div class="modal-body">
+                                                <p>Surat Order kerja dengan status "Deny" tidak dapat dicetak</p>
+                                             
+                          </div>
+                        </div>
+                     </div>
+                    </div>
+
+
                     <div class="row">
                       <div class="col-sm-12 col-md-5">
                         <div class="showing-items">Menampilkan

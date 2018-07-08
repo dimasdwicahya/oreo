@@ -49,7 +49,7 @@ if( strlen($username) < 2 )
   $_SESSION['nama_u'] = $row['nama'];
   $_SESSION['akses']    = $row['level'];
 
-  if( $row['level'] === 'manager')
+  if(( $row['level'] === 'manager')||( $row['level'] === 'organik'))
   {
    //data hak Admin di set
    $_SESSION['saya_manager']= 'TRUE';
@@ -58,7 +58,7 @@ if( strlen($username) < 2 )
   exit();
   }
 
- else if( $row['level'] === 'teknisi')
+ else if(( $row['level'] === 'teknisi')||( $row['level'] === 'admin'))
   {
    //data hak Admin di set
    $_SESSION['saya_teknisi']= 'TRUE';

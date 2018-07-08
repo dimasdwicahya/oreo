@@ -11,9 +11,6 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
 }
 
 ?>
-
-
-
 <!-- site head -->
 <!DOCTYPE html>
 <html lang="en">
@@ -60,7 +57,9 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
             ?>
           </div>
           <div class="profile-info">
-            <h2><?php echo $nama; ?></h2>
+            <h2><?php echo $nama;?></h2>
+
+
           </div>
         </div>
         <!-- /menu profile quick info -->
@@ -172,8 +171,7 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                     </div>
                   </div>
                 </li>
-                <li><a href="user-profile.html"><i class="fa fa-user-o" aria-hidden="true"></i>Profile</a></li>
-                <li><a href="javascript:void(0)"><i class="fa fa-cog" aria-hidden="true"></i> Pengaturan</a></li>
+                <li><a href="index.php?page=dashboard"><i class="fa fa-user-o" aria-hidden="true"></i>Profile</a></li>
                 <li><a href="../logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
               </ul>
             </li>
@@ -230,7 +228,7 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
         // code...
 
     
-      // FUNGSI UNTUK REGIONAL
+        // FUNGSI UNTUK REGIONAL
        
         //Fetch all the country data
         $query = $db->query("SELECT * FROM tb_regional ORDER BY regional ASC");
@@ -283,8 +281,19 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                 <div class="bg-white padding-25 h-100">
                  
                   <form action="proses-input_order.php" method="POST" enctype="multipart/form-data" name="add_name" id="add_name">
+                    <?php
+                    //AMBIL DATA PEMBUAT
+                    $sql_pembuat = mysqli_query($db,"SELECT * FROM tb_user WHERE nama='$nama' ");
+                    ?>
                     <div class="form-group">
-                      <label for="exampleInputPassword1">Nama Pekerjaan</label>
+                      <label for="exampleInputPassword1">Nama Pekerjaan 
+                        <?php
+                        while ($dt_pembuat=mysqli_fetch_array($sql_pembuat)) {
+                          echo"<input type='hidden' name='nip_pembuat' value='$dt_pembuat[nip]'>";
+                            
+                        }
+                        ?>
+                      </label>
                       <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Nama Pekerjaan" name="namapekerjaan">
                     </div>
                     <div class="form-group">
@@ -330,17 +339,25 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                     </div>
                     <div class="form-group">
                       <label for="exampleFormControlTextarea1">Lampiran</label>
-                      <div class="custom-file">
+                      <div class="custom-file" style="margin-bottom: 1%;">
                         <input class="custom-file-input" id="validatedCustomFile" type="file" name="gambar_ft_sebelum[]" multiple required>
                         <label class="custom-file-label" for="validatedCustomFile">Pilih foto Sebelum Min 1 Maks 3</label>
                       </div>
-                      <div class="custom-file">
+                      <div class="custom-file" style="margin-bottom: 1%;">
                         <input class="custom-file-input" id="validatedCustomFile" type="file" name="gambar_ft_progress[]" multiple required>
                         <label class="custom-file-label" for="validatedCustomFile">Pilih foto Progress Min 1 Maks 3</label>
                       </div>
-                      <div class="custom-file">
+                      <div class="custom-file" style="margin-bottom: 1%;">
                         <input class="custom-file-input" id="validatedCustomFile" type="file" name="gambar_ft_sesudah[]" multiple required>
                         <label class="custom-file-label" for="validatedCustomFile">Pilih foto Sesudah Min 1 Maks 3</label>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="exampleFormControlTextarea1">Foto Denah Geocam</label>
+                      <div class="custom-file">
+                        <input class="custom-file-input" id="validatedCustomFile" type="file" name="gambar_ft_denah" required>
+                        <label class="custom-file-label" for="validatedCustomFile">Pilih foto Denah</label>
                       </div>
                     </div>
 
@@ -375,8 +392,7 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                     <!--   <input type="button" name="submit_pekerjaan" id="submit_pekerjaan" class="btn btn-info" value="Submit" /> 
                                   </div> -->
                     </div>
-
-
+                    
                     <div class="form-group mb-0">
                       <button type="reset" class="btn btn-secondary">Draft</button>
                       <button type="submit" class="btn btn-theme" name="submit" id="submit">Submit</button>
@@ -403,6 +419,7 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
         FROM ((tb_order
         INNER JOIN tb_witel ON tb_order.kd_witel = tb_witel.kd_witel)
         INNER JOIN tb_tiket ON tb_order.notiket = tb_tiket.notiket)
+        WHERE tb_tiket.status=0 OR tb_tiket.status=3  
 
         ";
 
@@ -520,11 +537,16 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <?php while ($data=mysqli_fetch_array($res)) 
+
+
+
+                                                    <?php 
+                                                    $nomor=1;
+                                                    while ($nomor <= ($data=mysqli_fetch_array($res))) 
                                                     {
                                                       ?>
                                                     <tr>
-                                                        <td class="text-center"><?php echo $data["id"]; ?></td>
+                                                        <td class="text-center"><?php echo $nomor; ?></td>
                                                         <td class="text-center"><?php echo $data["notiket"]; ?></td>
                                                         <td><?php echo $data["tanggal_buat"]; ?></td>
                                                         <td><?php echo $data["namapekerjaan"]; ?></td>
@@ -544,7 +566,10 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                                           ?>
                                                          </td>
                                                     </tr>
-                                                    <?php } ?>
+                                                    <?php 
+                                                    $nomor++;
+                                                    } 
+                                                    ?>
 
                                                     </tbody>
                                                 </table>
@@ -721,11 +746,14 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <?php while ($data=mysqli_fetch_array($res)) 
+                                                    <?php 
+                                                    $penomoran = 1;
+                                                    while ($data=mysqli_fetch_array($res)) 
                                                     {
+                                                      while($penomoran <= ($data=mysqli_fetch_array($res))){
                                                       ?>
                                                     <tr>
-                                                        <td class="text-center"><?php echo $data["id"]; ?></td>
+                                                        <td class="text-center"><?php echo $penomoran; ?></td>
                                                         <td class="text-center"><?php echo $data["notiket"]; ?></td>
                                                         <td><?php echo $data["tanggal_buat"]; ?></td>
                                                         <td><?php echo $data["namapekerjaan"]; ?></td>
@@ -734,16 +762,20 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                                         <td class="text-center"><?php echo $data["kd_sto"]; ?></td>
                                                         <td><?php echo $data["penyebab"]; ?></td>
                                                          
-                                                         <td class="text-center">
-                                                          
+                                                        <td class="text-center">
                                                           <a href="cetak_order_kerja.php?notiket=<?php echo $data["notiket"]; ?>">
-                                                                    <button type="button" class="btn bg-transparent btn-circle" title="Print">
-                                                                      <b><i class="fa fa-print" ></i></b >
-                                                                    </button>
-                                                                    </a>
-                                                         </td>
+                                                              <button type="button" class="btn bg-transparent btn-circle" title="Print">
+                                                                <b><i class="fa fa-print" ></i></b>
+                                                              </button>
+                                                          </a>
+                                                        </td>
+
                                                     </tr>
-                                                    <?php } ?>
+                                                    <?php
+                                                      $penomoran++; 
+                                                      }
+                                                    } 
+                                                    ?>
 
                                                     </tbody>
                                                 </table>
