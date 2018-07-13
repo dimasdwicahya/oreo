@@ -68,6 +68,16 @@ if( strlen($username) < 2 )
   }
   
 
+ else if($row['level'] === 'administrator')
+  {
+   //data hak Admin di set
+   $_SESSION['saya_administrator']= 'TRUE';
+   //menuju halaman sesuai hak akses
+  header('location:administrator/index.php?page=dashboard');
+  exit();
+  }
+
+
  }else{
 
   //jika data yang dimaksud tidak ada

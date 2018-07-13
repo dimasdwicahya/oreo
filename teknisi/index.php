@@ -195,23 +195,74 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
             <div class="col-12 col-lg-9">
               <!-- START breadcrumb -->
               <ol class="breadcrumb pl-0 pr-0 float-lg-right">
-                <li><a href="index-2.html">Oreo</a></li>
-                <li><a href="javascript:void(0)">Teknisi</a></li>
+                <li><a href="index.php?page=dashboard">Oreo</a></li>
+                <li>
+                  <?php
+                  $a = mysqli_query($db,"select * from tb_user where nama='$nama'");
+                  while($aa=mysqli_fetch_array($a)){
+                    echo $aa["level"];
+                  }
+                  ?>
+                </li>
                 <li class="active">Dashboard</li>
               </ol>
               <!-- END breadcrumb -->
             </div>
             <div class="col-12">
-              <h3>General elements</h3>
-            </div>
-          </div>
-          <!-- END PAGE COVER -->
-          
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-lg-12 col-xl-6 mb-2">
-                INI DASHBOARD
-                
+              <!-- END PAGE COVER -->
+             <div class="row tile-count">
+                    <div class="col-sm-6 col-md-6 col-lg-3 col-xl-3 tile-stats-count" style="margin:2%;">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-6"><i class="fa fa-clone text-danger" aria-hidden="true" style="font-size: 32pt;"></i>
+                                <h5 class="text-muted text-uppercase text-danger">Order Kerja Masuk</h5>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-6">
+                            <?php
+                              $a = mysqli_query($db,"SELECT COUNT(notiket) as JUMLAH FROM tb_tiket");
+                              while($jum = mysqli_fetch_array($a)){
+                                 echo"<h3 class='counter text-right m-t-15 text-danger'>$jum[JUMLAH]</h3>";
+                              }
+                            ?>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-6 col-lg-3 col-xl-3 tile-stats-count" style="margin:2%;">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-6"><i style="font-size: 32pt;" class="fa fa-table text-info" aria-hidden="true"></i>
+                                <h5 class="text-muted text-uppercase text-info">Order Kerja Complete</h5>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-6">
+                            <?php
+                              $a = mysqli_query($db,"SELECT COUNT(notiket) as JUMLAH FROM tb_tiket WHERE status=1");
+                              while($jum = mysqli_fetch_array($a)){
+                                 echo"<h3 class='counter text-right m-t-15 text-info'>$jum[JUMLAH]</h3>";
+                              }
+                            ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-6 col-lg-3 col-xl-3 tile-stats-count" style="margin:2%;">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-6"> <i style="font-size: 32pt;"class="fa fa-file text-warning" aria-hidden="true"></i>
+                                <h5 class="text-muted text-uppercase text-warning">Order Kerja Deny</h5>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-6">
+                            <?php
+                              $a = mysqli_query($db,"SELECT COUNT(notiket) as JUMLAH FROM tb_tiket WHERE status=3");
+                              while($jum = mysqli_fetch_array($a)){
+                                 echo"<h3 class='counter text-right m-t-15 text-warning'>$jum[JUMLAH]</h3>";
+                              }
+                            ?>
+                            </div>
+                            <div class="col-12">
+                            </div>
+                        </div>
+                    </div>
+                  </div>         
+                </div>
               </div>
             </div>
           </div>
@@ -263,8 +314,15 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
             <div class="col-12 col-lg-9">
               <!-- START breadcrumb -->
               <ol class="breadcrumb pl-0 pr-0 float-lg-right">
-                <li><a href="index-2.html">Oreo</a></li>
-                <li><a href="javascript:void(0)">Teknisi</a></li>
+                <li><a href="index.php?page=dashboard">Oreo</a></li>
+                <li>
+                  <?php
+                  $a = mysqli_query($db,"select * from tb_user where nama='$nama'");
+                  while($aa=mysqli_fetch_array($a)){
+                    echo $aa["level"];
+                  }
+                  ?>
+                </li>
                 <li class="active">Input Order</li>
               </ol>
               <!-- END breadcrumb -->
@@ -413,17 +471,7 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
 
         // START HALAMAN IN PROGRESS ORDER
         case "in_progress_order":
-       
-        $sql = "
-        SELECT tb_order.id,tb_order.namapekerjaan,tb_order.notiket,tb_order.lokasi,tb_order.kd_witel,tb_order.kd_sto,tb_order.penyebab,tb_order.lampiran, tb_witel.witel, tb_tiket.tanggal_buat,tb_tiket.status
-        FROM ((tb_order
-        INNER JOIN tb_witel ON tb_order.kd_witel = tb_witel.kd_witel)
-        INNER JOIN tb_tiket ON tb_order.notiket = tb_tiket.notiket)
-        WHERE tb_tiket.status=0 OR tb_tiket.status=3  
-
-        ";
-
-        $res = mysqli_query($db,$sql);
+    
 
         ?>
 
@@ -432,13 +480,20 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                 <!-- START PAGE COVER -->
                 <div class="row bg-title clearfix page-title">
                     <div class="col-12 col-lg-3">
-                        <h4 class="page-title">Getting started!</h4>
+ 
                     </div>
                     <div class="col-12 col-lg-9">
                         <!-- START breadcrumb -->
                         <ol class="breadcrumb pl-0 pr-0 float-lg-right">
-                            <li><a href="index-2.html">Oreo</a></li>
-                            <li><a href="javascript:void(0)">Teknisi</a></li>
+                            <li><a href="index.php?page=dashboard">Oreo</a></li>
+                            <li>
+                              <?php
+                              $a = mysqli_query($db,"select * from tb_user where nama='$nama'");
+                              while($aa=mysqli_fetch_array($a)){
+                                echo $aa["level"];
+                              }
+                              ?>
+                            </li>
                             <li class="active">In Progress Order</li>
                         </ol>
                         <!-- END breadcrumb -->
@@ -457,16 +512,6 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                     <div class="row">
                                         <div class="col-sm-12 col-lg-4 col-xl-6">
                                             <div class="data-table-length">
-                                                <label>
-                                                    Tampilkan:
-                                                    <select aria-controls="example" class="form-control">
-                                                        <option value="10">10</option>
-                                                        <option value="25">25</option>
-                                                        <option value="50">50</option>
-                                                        <option value="100">100</option>
-                                                    </select>
-                                                    data
-                                                </label>
                                             </div>
                                         </div>
 
@@ -540,9 +585,30 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
 
 
 
-                                                    <?php 
-                                                    $nomor=1;
-                                                    while ($nomor <= ($data=mysqli_fetch_array($res))) 
+                          <?php
+
+                            // Langkah 1. Tentukan batas,cek halaman & posisi data
+                            $batas   = 10;
+                            $halaman = @$_GET['halaman'];
+                            if(empty($halaman)){
+                             $posisi  = 0;
+                             $halaman = 1;
+                            }
+                            else{
+                              $posisi  = ($halaman-1) * $batas;
+                            }
+
+                            // Langkah 2. Sesuaikan query dengan posisi dan batas
+                            $query  = " SELECT tb_order.id,tb_order.namapekerjaan,tb_order.notiket,tb_order.lokasi,tb_order.kd_witel,tb_order.kd_sto,tb_order.penyebab,tb_order.lampiran, tb_witel.witel, tb_tiket.tanggal_buat,tb_tiket.status
+                              FROM ((tb_order
+                              INNER JOIN tb_witel ON tb_order.kd_witel = tb_witel.kd_witel)
+                              INNER JOIN tb_tiket ON tb_order.notiket = tb_tiket.notiket)
+                              WHERE tb_tiket.status=0 OR tb_tiket.status=3  LIMIT $posisi,$batas";
+
+                            $tampil = mysqli_query($db, $query);
+                            $no = $posisi+1;
+                            $nomor=1;
+                                                    while ($nomor <= ($data=mysqli_fetch_array($tampil))) 
                                                     {
                                                       ?>
                                                     <tr>
@@ -559,6 +625,8 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                                           <?php 
                                                               if($data["status"]==1){
                                                                   echo '<span class="badge badge-pill badge-info text-uppercase">Completed</span>';
+                                                              }else if($data["status"]==3){
+                                                                echo '<span class="badge badge-pill badge-warning text-uppercase">Deny</span>';
                                                               }else{
                                                                 echo '<span class="badge badge-pill badge-danger text-uppercase">Progress</span>';
                                                                   
@@ -567,9 +635,12 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                                          </td>
                                                     </tr>
                                                     <?php 
+                                                    $no++;
                                                     $nomor++;
+                                                    
                                                     } 
-                                                    ?>
+
+                            ?>
 
                                                     </tbody>
                                                 </table>
@@ -582,7 +653,7 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                               
                                               <?php
 
-                                              $sql_count = mysqli_query($db,"SELECT COUNT(notiket) as JUMLAH FROM tb_tiket WHERE status=0");
+                                              $sql_count = mysqli_query($db,"SELECT COUNT(notiket) as JUMLAH FROM tb_tiket WHERE status=0 or status=3");
                                               while($jumlah = mysqli_fetch_array($sql_count)){
                                                  echo $jumlah["JUMLAH"];
                                               }
@@ -593,15 +664,32 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                                 
                                             </div>
                                         </div>
+                                       <?php
+                                      // Langkah 3: Hitung total data dan halaman serta link 1,2,3
+                                      $query2     = mysqli_query($db, "select * from tb_tiket WHERE status=0 or status=3");
+                                      $jmldata    = mysqli_num_rows($query2);
+                                      $jmlhalaman = ceil($jmldata/$batas);
+
+                                      ?>
+
+
                                         <div class="col-sm-12 col-md-7">
                                             <div class="data-table-paginate">
                                                 <nav>
                                                     <ul class="pagination">
-                                                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+
+                                                    <?php
+
+                                                    for($i=1;$i<=$jmlhalaman;$i++)
+                                                    if ($i != $halaman){
+                                                     echo "  <li class='page-item'> <a href=\"index.php?page=in_progress_order&halaman=$i\" class='page-link'>$i</a></li>";
+                                                    }
+                                                    else{
+                                                     echo " <li class='page-item'> <a class='page-link badge-danger' style='color:white;'>$i</a> </li>";
+                                                    }
+
+                                                    ?>
+                                                         
                                                     </ul>
                                                 </nav>
                                             </div>
@@ -622,18 +710,6 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
 
         // START HALAMAN COMPLETE ORDER
         case "complete_order":
-       
-        $sql = "
-        SELECT tb_order.id,tb_order.namapekerjaan,tb_order.notiket,tb_order.lokasi,tb_order.kd_witel,tb_order.kd_sto,tb_order.penyebab,tb_order.lampiran, tb_witel.witel, tb_tiket.tanggal_buat,tb_tiket.status
-        FROM ((tb_order
-        INNER JOIN tb_witel ON tb_order.kd_witel = tb_witel.kd_witel)
-        INNER JOIN tb_tiket ON tb_order.notiket = tb_tiket.notiket)
-        WHERE tb_tiket.status=1
-
-        ";
-
-        $res = mysqli_query($db,$sql);
-
         ?>
 
         <!-- page content -->
@@ -641,13 +717,19 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                 <!-- START PAGE COVER -->
                 <div class="row bg-title clearfix page-title">
                     <div class="col-12 col-lg-3">
-                        <h4 class="page-title">Getting started!</h4>
                     </div>
                     <div class="col-12 col-lg-9">
                         <!-- START breadcrumb -->
                         <ol class="breadcrumb pl-0 pr-0 float-lg-right">
-                            <li><a href="index-2.html">Oreo</a></li>
-                            <li><a href="javascript:void(0)">Teknisi</a></li>
+                            <li><a href="index.php?page=dashboard">Oreo</a></li>
+                            <li>
+                              <?php
+                              $a = mysqli_query($db,"select * from tb_user where nama='$nama'");
+                              while($aa=mysqli_fetch_array($a)){
+                                echo $aa["level"];
+                              }
+                              ?>
+                            </li>
                             <li class="active">Complete Order</li>
                         </ol>
                         <!-- END breadcrumb -->
@@ -666,16 +748,6 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                     <div class="row">
                                         <div class="col-sm-12 col-lg-4 col-xl-6">
                                             <div class="data-table-length">
-                                                <label>
-                                                    Tampilkan:
-                                                    <select aria-controls="example" class="form-control">
-                                                        <option value="10">10</option>
-                                                        <option value="25">25</option>
-                                                        <option value="50">50</option>
-                                                        <option value="100">100</option>
-                                                    </select>
-                                                    data
-                                                </label>
                                             </div>
                                         </div>
 
@@ -747,10 +819,30 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                                     </thead>
                                                     <tbody>
                                                     <?php 
+ 
+                                                    $batas   = 5;
+                                                    $halaman = @$_GET['halaman'];
+                                                    if(empty($halaman)){
+                                                     $posisi  = 0;
+                                                     $halaman = 1;
+                                                    }
+                                                    else{
+                                                      $posisi  = ($halaman-1) * $batas;
+                                                    }
+
+                                                    // Langkah 2. Sesuaikan query dengan posisi dan batas
+                                                    $query  = "       SELECT tb_order.id,tb_order.namapekerjaan,tb_order.notiket,tb_order.lokasi,tb_order.kd_witel,tb_order.kd_sto,tb_order.penyebab,tb_order.lampiran, tb_witel.witel, tb_tiket.tanggal_buat,tb_tiket.status
+                                                      FROM ((tb_order
+                                                      INNER JOIN tb_witel ON tb_order.kd_witel = tb_witel.kd_witel)
+                                                      INNER JOIN tb_tiket ON tb_order.notiket = tb_tiket.notiket)
+                                                      WHERE tb_tiket.status=1 LIMIT $posisi,$batas";
+
+                                                    $tampil = mysqli_query($db, $query);
+                                                    $no = $posisi+1;
+                                                    $nomor=1;
+
                                                     $penomoran = 1;
-                                                    while ($data=mysqli_fetch_array($res)) 
-                                                    {
-                                                      while($penomoran <= ($data=mysqli_fetch_array($res))){
+                                                    while($penomoran <= ($data=mysqli_fetch_array($tampil))){
                                                       ?>
                                                     <tr>
                                                         <td class="text-center"><?php echo $penomoran; ?></td>
@@ -773,7 +865,7 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                                     </tr>
                                                     <?php
                                                       $penomoran++; 
-                                                      }
+                                                    
                                                     } 
                                                     ?>
 
@@ -799,15 +891,31 @@ if( !isset($_SESSION['nama_u']) ) //jika session nama tidak ada
                                                 
                                             </div>
                                         </div>
+                                        <?php
+                                      // Langkah 3: Hitung total data dan halaman serta link 1,2,3
+                                      $query2     = mysqli_query($db, "select * from tb_tiket WHERE status=1");
+                                      $jmldata    = mysqli_num_rows($query2);
+                                      $jmlhalaman = ceil($jmldata/$batas);
+
+                                      ?>
+
+
                                         <div class="col-sm-12 col-md-7">
                                             <div class="data-table-paginate">
                                                 <nav>
                                                     <ul class="pagination">
-                                                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+
+                                                    <?php
+
+                                                    for($i=1;$i<=$jmlhalaman;$i++)
+                                                    if ($i != $halaman){
+                                                     echo "  <li class='page-item'> <a href=\"index.php?page=complete_order&halaman=$i\" class='page-link'>$i</a></li>";
+                                                    }
+                                                    else{
+                                                     echo " <li class='page-item'> <a class='page-link badge-danger' style='color:white;'>$i</a> </li>";
+                                                    }
+
+                                                    ?>
                                                     </ul>
                                                 </nav>
                                             </div>
